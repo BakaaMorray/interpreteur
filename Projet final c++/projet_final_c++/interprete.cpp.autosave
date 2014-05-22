@@ -235,7 +235,6 @@ void interprete::affichageMsg()
 
 void interprete::interpretation()
 {
-    pDouble.empiler(8);
     QFile fin("C:/Users/Maxime/Documents/GitHub/interpreteur/Projet final c++/build-projet_final_c++-Desktop_Qt_5_2_1_MinGW_32bit-Debug/debug/ptitebite");
     bool test = false;
     QChar temp;
