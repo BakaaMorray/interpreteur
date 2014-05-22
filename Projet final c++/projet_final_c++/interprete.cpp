@@ -237,6 +237,7 @@ void interprete::interpretation(const string & a)
 {
     ifstream fin(a.c_str());
     bool test = false;
+    bool testInt = true;
     char temp;
     if(!fin)
     {
@@ -250,13 +251,17 @@ void interprete::interpretation(const string & a)
             string tempBis;
             getline(fin,tempBis);
             string * stockage = new string();
+            string * stockageInt = new string();
             for(int i=0;i<=tempBis.length();i++)
             {
 
                 temp = tempBis[i];
+                if(isdigit(temp) == 1)
+                {
+                   *stockageInt = (*stockageInt) + temp;
+                }
                 if(temp == ' ' || temp == '\0')
                 {
-
                     map<string, void(interprete::*)()>::iterator it;
                     for(it = bdd.begin(); it!= bdd.end();++it)
                     {
@@ -264,7 +269,13 @@ void interprete::interpretation(const string & a)
                         {
 
                             (this->*it->second)(); // PUTIN DE MERDE YOLO !!!
+                            testInt = false;
                         }
+                    }
+                    if(testInt)
+                    {
+                        QString bite = stockageInt->c_str();
+                        pDouble.empiler(bite.toDouble());
                     }
                     test = true;
                 }
