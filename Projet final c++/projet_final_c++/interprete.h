@@ -11,7 +11,7 @@ class interprete : public QWidget
 public:
     interprete();
     interprete(int, char**);
-    void interpretation();
+    void interpretation(const string &);
     //char * getArgv(){return val_argv;}
     void pop();
     void popstr();

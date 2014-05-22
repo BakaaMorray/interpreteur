@@ -52,7 +52,7 @@ interprete::interprete(int argc, char * argv[]): val_argc(argc)
     {
         val_argv = argv[1];
         pString.empiler(val_argv);
-        interpretation();
+        interpretation(val_argv);
     }
     else
         pString.empiler(argv[0]);
@@ -233,13 +233,12 @@ void interprete::affichageMsg()
     msg->clearFocus();
 }
 
-void interprete::interpretation()
+void interprete::interpretation(const string & a)
 {
-    pDouble.empiler(8);
-    QFile fin("C:/Users/Maxime/Documents/GitHub/interpreteur/Projet final c++/build-projet_final_c++-Desktop_Qt_5_2_1_MinGW_32bit-Debug/debug/ptitebite");
+    ifstream fin(a.c_str());
     bool test = false;
-    QChar temp;
-    if(!fin.open(QIODevice::ReadOnly | QIODevice::Text))
+    char temp;
+    if(!fin)
     {
         //return "probleme d'ouverture du script";
         affichage->append("<em>Pb ouverture</em>");
@@ -248,18 +247,20 @@ void interprete::interpretation()
     {
         do
         {
-            QString tempBis = fin.readLine();
-            QString * stockage = new QString();
-            for(int i=0;i<tempBis.length();i++)
+            string tempBis;
+            getline(fin,tempBis);
+            string * stockage = new string();
+            for(int i=0;i<=tempBis.length();i++)
             {
+
                 temp = tempBis[i];
-                if(temp == ' ')
+                if(temp == ' ' || temp == '\0')
                 {
 
                     map<string, void(interprete::*)()>::iterator it;
                     for(it = bdd.begin(); it!= bdd.end();++it)
                     {
-                        if(it->first == stockage->toStdString())
+                        if(it->first == *stockage)
                         {
 
                             (this->*it->second)(); // PUTIN DE MERDE YOLO !!!
@@ -267,17 +268,20 @@ void interprete::interpretation()
                     }
                     test = true;
                 }
+
                     *stockage = (*stockage) + temp;
+
                 if(test)
                 {
                     //affichage->append(*stockage);
 
 
-                    delete stockage;
+                    *stockage = "";
                     test = false;
-                }
 
+                }
             }
-        }while(!fin.atEnd());
+            delete stockage;
+        }while(!fin.eof());
     }
 }
